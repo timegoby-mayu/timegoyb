@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[orderinfo][订单]查询方法的sql文件
+ @version: 0_1
+ @author: mayu
+ @date: 2019-07-02 16:07:48
+ -->
+<mapper namespace="com.paasit.pai.core">
+
+<!-- 订单列表查询 -->
+	<select id="OrderInfoF04SQL01"
+		parameterType="com.paasit.pai.core.sql.dto.order.OrderInfoF04SQL01IM01"
+		resultType="com.paasit.pai.core.sql.dto.order.OrderInfoF04SQL01OM01">
+		SELECT
+		t1.id,
+		t1.orderName,
+		t1.orderDesc,
+		t1.orderNum,
+		t1.orderDate,
+		t1.orderAmt,
+		t1.created_by AS createdBy,
+		t1.created_date AS createdDate,
+		t1.last_modified_by AS lastModifiedBy,
+		t1.last_modified_date AS
+		lastModifiedDate,
+		t1.is_del AS isDel
+		FROM
+		orderinfo AS t1
+		<where>
+			(t1.IS_DEL = 0 OR t1.IS_DEL IS NULL)
+			<if test="orderName != null and orderName != ''">
+				AND t1.orderName LIKE CONCAT('%',#{orderName},'%')
+			</if>
+			<if test="orderDateStart != null and orderDateStart != ''">
+				AND t1.orderDate <![CDATA[>]]>
+				#{orderDateStart,jdbcType=TIMESTAMP}
+			</if>
+			<if test="orderDateEnd != null and orderDateEnd != ''">
+				AND t1.orderDate <![CDATA[<]]>
+				#{orderDateEnd,jdbcType=TIMESTAMP}
+			</if>
+			<if test="orderNumStart != null and orderNumStart != ''">
+				AND t1.orderNum <![CDATA[>]]>
+				#{orderNumStart, jdbcType=INTEGER}
+			</if>
+			<if test="orderNumEnd != null and orderNumEnd != ''">
+				AND t1.orderNum <![CDATA[<]]>
+				#{orderNumEnd, jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+	
+<!-- 订单详情列表查询 -->
+	<select id="OrderInfoF04SQL02" parameterType="java.util.List"
+		resultType="com.paasit.pai.core.sql.dto.order.OrderInfoF04SQL02OM01">
+		SELECT
+		t1.id,
+		t1.orderId,
+		t1.orderRemark,
+		t1.orderAmount,
+		t1.created_by AS
+		createdBy,
+		t1.created_date AS createdDate,
+		t1.last_modified_by AS
+		lastModifiedBy,
+		t1.last_modified_date AS lastModifiedDate,
+		t1.is_del AS
+		isDel
+		FROM
+		orderdetail AS t1
+		<choose>
+			<when test="list != null and list.size>0">
+				<where>
+					t1.orderId IN
+					<foreach collection="list" item="item" index="index"
+						open="(" close=")" separator=",">
+						#{item.orderId}
+					</foreach>
+				</where>
+			</when>
+			<otherwise>
+				<where>
+					t1.id = null
+				</where>
+			</otherwise>
+		</choose>
+	</select>
+</mapper>
