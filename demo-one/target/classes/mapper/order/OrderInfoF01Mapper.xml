@@ -46,7 +46,7 @@
 描述:新增订单详情列表 
 -->
 	<insert id="OrderInfoF01SQL02IS01"
-		parameterType="java.util.List">
+		parameterType="com.paasit.pai.core.sql.dto.order.OrderInfoF01SQL02IS01">
 		INSERT INTO
 		orderdetail (
 		id,
@@ -59,7 +59,7 @@
 		last_modified_date,
 		is_del )
 		VALUES
-		<foreach collection="list" item="item" index="index"
+		<foreach collection="orderDetailList" item="item" index="index"
 			separator=",">
 			(
 			#{item.id,jdbcType=VARCHAR},

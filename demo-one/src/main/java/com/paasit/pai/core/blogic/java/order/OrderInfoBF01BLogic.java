@@ -1,21 +1,19 @@
 package com.paasit.pai.core.blogic.java.order;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.paasit.pai.core.blogic.dto.order.OrderInfoF01ReqtM01;
 import com.paasit.pai.core.blogic.dto.order.OrderInfoF01RespM01;
 import com.paasit.pai.core.dao.UpdateDAO;
 import com.paasit.pai.core.service.BizLogic;
 import com.paasit.pai.core.sql.dto.order.OrderInfoF01SQL01IM01;
 import com.paasit.pai.core.sql.dto.order.OrderInfoF01SQL02IS01;
+import com.paasit.pai.core.sql.dto.order.OrderInfoF01SQL03IS01;
 import com.paasit.pai.core.utils.BeanCopierEx;
 
 /**
@@ -42,8 +40,8 @@ public class OrderInfoBF01BLogic implements BizLogic<OrderInfoF01ReqtM01, OrderI
 		// 构造订单sql001的查询条件
 		OrderInfoF01SQL01IM01 orderInfoF01SQL01IM01 = new OrderInfoF01SQL01IM01();
 
-		// 构造订单详情sql001的查询条件
-		List<OrderInfoF01SQL02IS01> list = new ArrayList<OrderInfoF01SQL02IS01>();
+		// 构造订单详情sql002的查询条件
+		OrderInfoF01SQL02IS01 orderInfoF01SQL02IS01 = new OrderInfoF01SQL02IS01();
 
 		// 将request参数拷贝到sql001Dto里
 		BeanCopierEx.copy(orderInfoF01ReqtM01, orderInfoF01SQL01IM01);
@@ -56,14 +54,17 @@ public class OrderInfoBF01BLogic implements BizLogic<OrderInfoF01ReqtM01, OrderI
 		log.info("插入订单id为:{} 成功", orderInfoF01SQL01IM01.getId());
 
 		// 执行完全插入订单详情表sql语句
-		list = BeanCopierEx.copy(orderInfoF01ReqtM01.getOrderDetail(), OrderInfoF01SQL02IS01.class);
+		List<OrderInfoF01SQL03IS01>  listSql03= BeanCopierEx.copy(orderInfoF01ReqtM01.getOrderDetail(), OrderInfoF01SQL03IS01.class);
 
-		for (OrderInfoF01SQL02IS01 orderInfoF01SQL02IS01 : list) {
-			orderInfoF01SQL02IS01.setId(UUID.randomUUID().toString());
-			orderInfoF01SQL02IS01.setOrderId(orderInfoF01SQL01IM01.getId());
+		for (OrderInfoF01SQL03IS01 orderInfoF01SQL03IS01 : listSql03) {
+			orderInfoF01SQL03IS01.setId(UUID.randomUUID().toString());
+			orderInfoF01SQL03IS01.setOrderId(orderInfoF01SQL01IM01.getId());
 		}
-		if (list.size() > 0) {
-			updateDAO.execute("OrderInfoF01SQL02IS01", list);
+		
+		//将入参的订单详情list  SqlinputDTO进行转换对象
+		if (listSql03.size() > 0) {
+			orderInfoF01SQL02IS01.setOrderDetailList(listSql03);
+			updateDAO.execute("OrderInfoF01SQL02IS01", orderInfoF01SQL02IS01);
 			log.info("插入订单详情OrderId为:{} 成功", orderInfoF01SQL01IM01.getId());
 		}
 		 //返回受影响的行数

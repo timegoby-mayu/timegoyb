@@ -42,7 +42,7 @@ public class OrderInfoF01ReqtM01 implements Serializable {
 	 * 订单名称
 	 */
 	@ApiModelProperty(value = "订单名称")
-	@NotBlank(message = "{com.paasit.pai.core.blogic.dto.order.orderName.NotBlank}")
+	@NotNull(message = "{com.paasit.pai.core.blogic.dto.order.orderName.NotBlank}")
 	@LengthMax(value = 10, message = "{com.paasit.pai.core.blogic.dto.order.orderName.LengthMax}")
 	private String orderName;
 
