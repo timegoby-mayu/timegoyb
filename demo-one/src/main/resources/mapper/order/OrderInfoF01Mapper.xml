@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[ordernfo][订单]新增方法的sql文件
+ @version: 0_1
+ @author: mayu
+ @date: 2017-07-02 16:07:48
+ -->
+<mapper namespace="com.paasit.pai.core">
+
+<!-- 
+描述:新增订单列表 
+-->
+	<insert id="OrderInfoF01SQL01IM01"
+		parameterType="com.paasit.pai.core.sql.dto.order.OrderInfoF01SQL01IM01">
+		INSERT INTO
+		orderinfo (
+		id,
+		orderName,
+		orderDesc,
+		orderNum,
+		orderDate,
+		orderAmt,
+		created_by,
+		created_date,
+		last_modified_by,
+		last_modified_date,
+		is_del )
+		VALUES (
+		#{id,jdbcType=VARCHAR},
+		#{orderName,jdbcType=VARCHAR},
+		#{orderDesc,jdbcType=VARCHAR},
+		#{orderNum,jdbcType=INTEGER},
+		#{orderDate,jdbcType=TIMESTAMP},
+		#{orderAmt,jdbcType=DECIMAL},
+		#{createdBy, jdbcType=VARCHAR},
+		#{createdDate, jdbcType=TIMESTAMP},
+		#{lastModifiedBy,
+		jdbcType=VARCHAR},
+		#{lastModifiedDate, jdbcType=TIMESTAMP},
+		#{isDel,
+		jdbcType=TINYINT})
+	</insert>
+
+<!-- 
+描述:新增订单详情列表 
+-->
+	<insert id="OrderInfoF01SQL02IS01"
+		parameterType="com.paasit.pai.core.sql.dto.order.OrderInfoF01SQL02IS01">
+		INSERT INTO
+		orderdetail (
+		id,
+		orderId,
+		orderRemark,
+		orderAmount,
+		created_by,
+		created_date,
+		last_modified_by,
+		last_modified_date,
+		is_del )
+		VALUES
+		<foreach collection="orderDetailList" item="item" index="index"
+			separator=",">
+			(
+			#{item.id,jdbcType=VARCHAR},
+			#{item.orderId,jdbcType=VARCHAR},
+			#{item.orderRemark,jdbcType=VARCHAR},
+			#{item.orderAmount},
+			#{item.createdBy, jdbcType=VARCHAR},
+			#{item.createdDate,
+			jdbcType=TIMESTAMP},
+			#{item.lastModifiedBy,jdbcType=VARCHAR},
+			#{item.lastModifiedDate, jdbcType=TIMESTAMP},
+			#{item.isDel,jdbcType=TINYINT}
+			)
+		</foreach>
+	</insert>
+</mapper>

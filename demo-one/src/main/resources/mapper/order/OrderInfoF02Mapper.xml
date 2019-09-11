@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--
+  描述:[orderinfo][订单]修改方法的sql文件
+ @version: 0_1
+ @author: mayu
+ @date: 2019-07-02 16:07:48
+ -->
+<mapper namespace="com.paasit.pai.core">
+<!--
+  描述:订单修改方法的sql文件
+ -->
+	  <update id="OrderInfoF02SQL01IM01" 
+          parameterType="com.paasit.pai.core.sql.dto.order.OrderInfoF02SQL01IM01">
+        UPDATE
+            orderinfo
+        SET
+            LAST_MODIFIED_BY = #{lastModifiedBy, jdbcType=VARCHAR},
+            LAST_MODIFIED_DATE = #{lastModifiedDate, jdbcType=TIMESTAMP},
+            IS_DEL = 1
+        WHERE
+            id = #{id, jdbcType=VARCHAR}
+    </update>
+ <!--
+  描述:订单详情修改方法的sql文件
+ -->   
+     <update id="OrderInfoF02SQL02IS01" 
+          parameterType="com.paasit.pai.core.sql.dto.order.OrderInfoF02SQL02IS01">
+        UPDATE
+            orderdetail
+        SET
+            LAST_MODIFIED_BY = #{lastModifiedBy, jdbcType=VARCHAR},
+            LAST_MODIFIED_DATE = #{lastModifiedDate, jdbcType=TIMESTAMP},
+            IS_DEL = 1
+        WHERE
+            orderId = #{orderId, jdbcType=VARCHAR}
+    </update>
+</mapper>
