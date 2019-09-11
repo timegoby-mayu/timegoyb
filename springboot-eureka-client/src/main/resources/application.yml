@@ -1,9 +1,0 @@
-server:
-  port: 8081
-spring:
-  application:
-  name: springboot-eureka-client
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://10.6.20.45:8080/eureka/
