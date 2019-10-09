@@ -1,0 +1,32 @@
+server:
+  port: 8081 #服务注册中心端口号
+spring:
+  application:
+  name: spring-cloud-gateway-sample-master
+  cloud:
+    gateway:
+      routes:
+        - id: host_route
+          uri: http://localhost:8081
+          predicates:
+              - Host=*.myhost.org
+
+        - id: rewritepath_route
+          uri: http://localhost:8081
+          predicates:
+            - Host=*.somehost.org
+            - Path=/*
+          filters:
+            - RewritePath=/(?<segment>.*), /api/$\{segment}
+
+        - id: hystrix_route
+          uri: http://httpbin.org
+          predicates:
+          - Host=*.hystrixfallback.org
+          - Path=/**
+          filters:
+            - name: Hystrix
+              args:
+                name: fallbackcmd
+                fallbackUri: forward:/hystrixfallback
+                  #- RewritePath=/consumingserviceendpoint, /backingserviceendpoint
