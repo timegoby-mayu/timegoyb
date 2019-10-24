@@ -1,0 +1,12 @@
+server:
+  port: 8082
+spring:
+  application:
+  name: eureka-cousumer-ribbon
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: localhost #服务注册中心实例的主机名(因为都在本机这里写的都是localhost)
+  client:
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:8080/eureka/
