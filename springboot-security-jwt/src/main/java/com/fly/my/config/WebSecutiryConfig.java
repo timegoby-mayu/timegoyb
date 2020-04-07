@@ -6,20 +6,20 @@ import com.fly.my.config.handler.AuthEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecutiryConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private AuthEntryPoint authEntryPoint; // 权限认证异常处理器
 
     /**
      * 自定义的加密算法
@@ -46,8 +46,8 @@ public class WebSecutiryConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider (userAuthenticationProvider ());
         //auth.authenticationProvider (userAuthenticationProvider ());
         /*内存认证*/
-        //auth.inMemoryAuthentication ().withUser ("admin").password ("p@ssw0rd").roles ("USER");
-        //auth.userDetailsService(userService).passwordEncoder(myPasswordEncoder());
+        //auth.inMemoryAuthentication ().withUser ("admin").password (myPasswordEncoder().encode ("p@ssw0rd")).roles ("USER");
+        //auth.userDetailsService(userDetailsService).passwordEncoder(myPasswordEncoder());
     }
 
 
@@ -84,15 +84,24 @@ public class WebSecutiryConfig extends WebSecurityConfigurerAdapter {
                 //.usernameParameter ("username").passwordParameter ("password")
                 //.failureHandler(new MyAuthenticationFailureHandler())
                 //.successHandler(new MyAuthenticationSuccessHandler())
-                .and ()
+                .and ()//.antMatcher ("/oauth/authorize")
                 .logout ()
                 .logoutUrl ("/logout")
                 //.logoutSuccessHandler(new MyLogoutSuccessHandler())
                 .permitAll ()
                 .and ().csrf ().disable ()
-                .addFilter (new JwtLoginFilter (authenticationManager ()))
-                .addFilter (new JwtAuthenticationFilter (authenticationManager ()))
-                .exceptionHandling().authenticationEntryPoint(authEntryPoint);;
+                .sessionManagement ().sessionCreationPolicy (SessionCreationPolicy.STATELESS);
+                //.addFilter (new JwtLoginFilter (authenticationManager ()))
+                //.addFilter (new JwtAuthenticationFilter (authenticationManager ()))
+                //.exceptionHandling().authenticationEntryPoint(authEntryPoint);
+               ;
     }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
 
 }
