@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Component
+//@Component
 public class MyUserDetailService implements UserDetailsService {
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -25,7 +26,7 @@ public class MyUserDetailService implements UserDetailsService {
         try {
             if(username.equals ("admin")){
                 Collection<GrantedAuthority> authList = getAuthorities();
-                return new User("admin","p@ssw0rd",authList);
+                return new User("admin", new BCryptPasswordEncoder ().encode("p@ssw0rd"),authList);
             }else{
                 throw new RuntimeException ("user is not exit!");
             }

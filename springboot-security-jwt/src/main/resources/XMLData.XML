@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="gb18030"?>
+<MSG>
+    <APPTYPE>CRD</APPTYPE>
+    <CURRENTFILE>TA</CURRENTFILE>
+    <INOUT>OUT</INOUT>
+    <FORMATERRS>2</FORMATERRS>
+    <FORMATS>
+        <FORMAT>file1</FORMAT>
+        <FORMAT>file2</FORMAT>
+    </FORMATS>
+    <TOTALRECORDS>5</TOTALRECORDS>
+    <SUCRECORDS>4</SUCRECORDS>
+    <FALRECORDS>1</FALRECORDS>
+    <ERRRECORDS>
+        <REC>
+            <BUSSNO>00000000000000000000000000000000000001</BUSSNO>
+            <ERRFIELDS>
+                <ERR>
+                    <ERRFIELD>PERNER_NAME</ERRFIELD>
+                    <ERRFIELDCN>持卡人姓名</ERRFIELDCN>
+                    <ERRDESC>以上数据格式存在：PERNER_NAME</ERRDESC>
+                </ERR>
+                <ERR>
+                    <ERRFIELD>PERNER_AGE</ERRFIELD>
+                    <ERRFIELDCN>持卡人姓名</ERRFIELDCN>
+                    <ERRDESC>以上数据格式存在：PERNER_NAME</ERRDESC>
+                </ERR>
+            </ERRFIELDS>
+        </REC>
+        <REC>
+            <BUSSNO>00000000000000000000000000000000000001</BUSSNO>
+            <ERRFIELDS>
+                <ERR>
+                    <ERRFIELD>PERNER_NAME</ERRFIELD>
+                    <ERRFIELDCN>持卡人姓名</ERRFIELDCN>
+                    <ERRDESC>以上数据格式存在：PERNER_NAME</ERRDESC>
+                </ERR>
+                <ERR>
+                    <ERRFIELD>PERNER_AGE</ERRFIELD>
+                    <ERRFIELDCN>持卡人姓名</ERRFIELDCN>
+                    <ERRDESC>以上数据格式存在：PERNER_NAME</ERRDESC>
+                </ERR>
+            </ERRFIELDS>
+        </REC>
+    </ERRRECORDS>
+</MSG>

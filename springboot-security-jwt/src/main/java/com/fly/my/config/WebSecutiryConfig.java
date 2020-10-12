@@ -21,87 +21,102 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class WebSecutiryConfig extends WebSecurityConfigurerAdapter {
 
-    /**
+/**
      * 自定义的加密算法
      *
      * @return
      */
-    @Bean
-    public PasswordEncoder myPasswordEncoder() {
-        return new BCryptPasswordEncoder ();
-    }
 
-    /**
-     * @Author: timegoby
-     * @Description: 配置userDetails的数据源，密码加密格式
-     * @Date: 2019/3/28-9:24
-     * @Param: [auth]
-     * @return: void
-     **/
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+@Bean
+public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+        }
+
+/**
+ * @Author: timegoby
+ * @Description: 配置userDetails的数据源，密码加密格式
+ * @Date: 2019/3/28-9:24
+ * @Param: [auth]
+ * @return: void
+ **/
+
+@Override
+protected void configure(AuthenticationManagerBuilder auth)throws Exception{
         /*
          *自定义认证
          */
-        auth.authenticationProvider (userAuthenticationProvider ());
+
+        //auth.authenticationProvider (userAuthenticationProvider ());
         //auth.authenticationProvider (userAuthenticationProvider ());
         /*内存认证*/
-        //auth.inMemoryAuthentication ().withUser ("admin").password (myPasswordEncoder().encode ("p@ssw0rd")).roles ("USER");
+
+        auth.inMemoryAuthentication().withUser("admin").password(new BCryptPasswordEncoder().encode("p@ssw0rd")).roles("USER");
         //auth.userDetailsService(userDetailsService).passwordEncoder(myPasswordEncoder());
-    }
+        }
 
 
-    private UserAuthenticationProvider userAuthenticationProvider() {
-        return new UserAuthenticationProvider ();
-    }
+private UserAuthenticationProvider userAuthenticationProvider(){
+        return new UserAuthenticationProvider();
+        }
 
-    /**
-     * @Author: timegoby
-     * @Description: 配置放行的资源
-     * @Date: 2019/3/28-9:23
-     * @Param: [web]
-     * @return: void
-     **/
+/**
+ * @Author: timegoby
+ * @Description: 配置放行的资源
+ * @Date: 2019/3/28-9:23
+ * @Param: [web]
+ * @return: void
+ **/
+
+/*
+@Override
+public void configure(WebSecurity web)throws Exception{
+        web.ignoring().antMatchers("/index.html","/static/**","/loginPage","/register");
+        }
+*/
+
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring ().antMatchers ("/index.html", "/static/**", "/loginPage", "/register");
+        // TODO 关闭spring security
+        web.ignoring().antMatchers("/**");
     }
+/**
+ * @Author: timegoby
+ * @Description: HttpSecurity包含了原数据（主要是url）
+ * 通过authenticationEntryPoint集成
+ * @Date: 2019/3/27-17:41
+ * @Param: [http]
+ * @return: void
+ **/
 
-    /**
-     * @Author: timegoby
-     * @Description: HttpSecurity包含了原数据（主要是url）
-     * 通过authenticationEntryPoint集成
-     * @Date: 2019/3/27-17:41
-     * @Param: [http]
-     * @return: void
-     **/
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests ().anyRequest ().authenticated ()
-                .and ()
-                //.addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .formLogin ().loginProcessingUrl ("/login")
-                //.usernameParameter ("username").passwordParameter ("password")
-                //.failureHandler(new MyAuthenticationFailureHandler())
-                //.successHandler(new MyAuthenticationSuccessHandler())
-                .and ()//.antMatcher ("/oauth/authorize")
-                .logout ()
-                .logoutUrl ("/logout")
-                //.logoutSuccessHandler(new MyLogoutSuccessHandler())
-                .permitAll ()
-                .and ().csrf ().disable ()
-                .sessionManagement ().sessionCreationPolicy (SessionCreationPolicy.STATELESS);
-                //.addFilter (new JwtLoginFilter (authenticationManager ()))
-                //.addFilter (new JwtAuthenticationFilter (authenticationManager ()))
-                //.exceptionHandling().authenticationEntryPoint(authEntryPoint);
-               ;
-    }
+@Override
+protected void configure(HttpSecurity http)throws Exception{
+        http.authorizeRequests().anyRequest().authenticated()
+        .and()
+        //.addFilter(new JwtAuthenticationFilter(authenticationManager()))
+        .formLogin().loginProcessingUrl("/login")
+        //.usernameParameter ("username").passwordParameter ("password")
+        //.failureHandler(new MyAuthenticationFailureHandler())
+        //.successHandler(new MyAuthenticationSuccessHandler())
+        .and()//.antMatcher ("/oauth/authorize")
+        .logout()
+        .logoutUrl("/logout")
+        //.logoutSuccessHandler(new MyLogoutSuccessHandler())
+        .permitAll()
+        .and().csrf().disable()
+        //.sessionManagement ().sessionCreationPolicy (SessionCreationPolicy.STATELESS);
+        //.addFilter (new JwtLoginFilter (authenticationManager ()))
+        //.addFilter (new JwtAuthenticationFilter (authenticationManager ()))
+        //.exceptionHandling().authenticationEntryPoint(authEntryPoint);
+        ;
+        }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
+@Bean
+@Override
+public AuthenticationManager authenticationManagerBean()throws Exception{
         return super.authenticationManagerBean();
-    }
+        }
 
-
-}
+public static void main(String[]args){
+        System.out.println("$2a$10$HqN7wasECd82ulBIIOaw3OnUYqRBsLlBIvq/p6xb8tDnnOy7CGIJ. = ["+new BCryptPasswordEncoder().encode("secret")+"]");
+        }
+        }

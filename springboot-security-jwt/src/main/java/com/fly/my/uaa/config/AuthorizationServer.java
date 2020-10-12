@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
@@ -21,16 +22,21 @@ import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConv
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
+import javax.sql.DataSource;
+
 /**
  * @Description: 作用描述
  * @Author: timegoby
  * @Date: 2020/4/1$ 12:52$
  * @Version: 1.0
  **/
-@Configuration
-@EnableAuthorizationServer
+//@Configuration
+//@EnableAuthorizationServer
 public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
 {
+    @Autowired
+    private DataSource dataSource;
+
     @Autowired
     private TokenStore tokenStore;
 
@@ -60,14 +66,21 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception
     {
-        clients.inMemory ()//使用in-memory内存
+        /*
+        将客户端配置信息存在内存中
+        * */
+        /*clients.inMemory ()//使用in-memory内存
         .withClient ("K2")//client_id
         .secret (new BCryptPasswordEncoder ().encode ("secret"))
         .resourceIds ("res1")//运行访问的资源Id
         .authorizedGrantTypes ("authorization_code","password","client_credentials","implicit","refresh_token")
         .scopes ("all")
         .autoApprove (false)
-        .redirectUris ("http://www.baidu.com");
+        .redirectUris ("http://www.baidu.com");*/
+         /*
+        JDBC方式存储客户端配置信息
+        * */
+        clients.withClientDetails(new JdbcClientDetailsService(dataSource));
     }
 
     /**

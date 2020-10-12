@@ -22,7 +22,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 //@EnableResourceServer
 public class ResouceServer extends ResourceServerConfigurerAdapter
 {
-    public static final  String RESOURCE_ID="res1";
+    public static final  String RESOURCE_ID="resource1";
 
 
     @Autowired
@@ -52,7 +52,7 @@ public class ResouceServer extends ResourceServerConfigurerAdapter
       * @author      timegoby
       * @Description 令牌验证服务
      */
-    @Bean
+    //@Bean
     public ResourceServerTokenServices tokenServices(){
         DefaultTokenServices services = new DefaultTokenServices ();
         services.setTokenStore (tokenStore);
